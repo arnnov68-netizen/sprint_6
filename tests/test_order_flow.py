@@ -1,12 +1,14 @@
+# tests/test_order_flow.py
 import allure
 import pytest
+from pages.main_page import MainPage
+from pages.order_page import OrderPage
 
 
 @allure.feature("Оформление заказа")
 class TestOrderFlow:
     """Тесты для проверки оформления заказа"""
 
-    # Тестовые данные для параметризации
     ORDER_DATA = [
         {
             "name": "Иван",
@@ -34,10 +36,10 @@ class TestOrderFlow:
 
     @allure.title("Успешное оформление заказа через верхнюю кнопку")
     @pytest.mark.parametrize("order_data", ORDER_DATA)
-    def test_successful_order_top_button(self, main_page, order_page, order_data):
-        """
-        Тест оформления заказа через верхнюю кнопку
-        """
+    def test_successful_order_top_button(self, driver, order_data):
+        main_page = MainPage(driver)
+        order_page = OrderPage(driver)
+
         main_page.open()
         main_page.click_order_button_top()
 
@@ -56,16 +58,14 @@ class TestOrderFlow:
             order_data["comment"]
         )
 
-        order_page.confirm_order()
-
-        assert order_page.check_order_success(), "Заказ не был оформлен успешно"
+        assert order_page.check_order_success(), "Заказ не был оформлен"
 
     @allure.title("Успешное оформление заказа через нижнюю кнопку")
     @pytest.mark.parametrize("order_data", ORDER_DATA)
-    def test_successful_order_bottom_button(self, main_page, order_page, order_data):
-        """
-        Тест оформления заказа через нижнюю кнопку
-        """
+    def test_successful_order_bottom_button(self, driver, order_data):
+        main_page = MainPage(driver)
+        order_page = OrderPage(driver)
+
         main_page.open()
         main_page.click_order_button_bottom()
 
@@ -84,6 +84,4 @@ class TestOrderFlow:
             order_data["comment"]
         )
 
-        order_page.confirm_order()
-
-        assert order_page.check_order_success(), "Заказ не был оформлен успешно"
+        assert order_page.check_order_success(), "Заказ не был оформлен"
