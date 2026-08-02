@@ -1,0 +1,61 @@
+[ {
+  "uid" : "b35ea848be80cc",
+  "name" : "Успешное оформление заказа через верхнюю кнопку",
+  "time" : {
+    "start" : 1785671091500,
+    "stop" : 1785671098426,
+    "duration" : 6926
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "5427a5e067ec191a",
+  "name" : "Успешное оформление заказа через нижнюю кнопку",
+  "time" : {
+    "start" : 1785671158968,
+    "stop" : 1785671167930,
+    "duration" : 8962
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "de44f1db2298c76b",
+  "name" : "Успешное оформление заказа через верхнюю кнопку",
+  "time" : {
+    "start" : 1785671114056,
+    "stop" : 1785671121282,
+    "duration" : 7226
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "7d2f7213e9bc96a5",
+  "name" : "Проверка ответов на все вопросы в разделе FAQ",
+  "time" : {
+    "start" : 1785671044767,
+    "stop" : 1785671051476,
+    "duration" : 6709
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "c5389e60296970fb",
+  "name" : "Проверка перехода на Дзен по логотипу Яндекса",
+  "time" : {
+    "start" : 1785671067582,
+    "stop" : 1785671075926,
+    "duration" : 8344
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "9f086866686cfa33",
+  "name" : "Успешное оформление заказа через нижнюю кнопку",
+  "time" : {
+    "start" : 1785671136984,
+    "stop" : 1785671143829,
+    "duration" : 6845
+  },
+  "status" : "passed",
+  "severity" : "normal"
+} ]

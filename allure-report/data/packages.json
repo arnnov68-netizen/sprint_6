@@ -1,0 +1,93 @@
+{
+  "uid" : "83edc06c07f9ae9e47eb6dd1b683e4e2",
+  "name" : "packages",
+  "children" : [ {
+    "name" : "tests",
+    "children" : [ {
+      "name" : "test_important_questions",
+      "children" : [ {
+        "name" : "Проверка ответов на все вопросы в разделе FAQ",
+        "uid" : "7d2f7213e9bc96a5",
+        "parentUid" : "0ff40c8247ce08c2c49d5feafc40fda5",
+        "status" : "passed",
+        "time" : {
+          "start" : 1785671044767,
+          "stop" : 1785671051476,
+          "duration" : 6709
+        },
+        "flaky" : false,
+        "parameters" : [ ]
+      } ],
+      "uid" : "0ff40c8247ce08c2c49d5feafc40fda5"
+    }, {
+      "name" : "test_navigation",
+      "children" : [ {
+        "name" : "Проверка перехода на Дзен по логотипу Яндекса",
+        "uid" : "c5389e60296970fb",
+        "parentUid" : "7a1bcddc3f018d2a3c9826a8cb79975e",
+        "status" : "passed",
+        "time" : {
+          "start" : 1785671067582,
+          "stop" : 1785671075926,
+          "duration" : 8344
+        },
+        "flaky" : false,
+        "parameters" : [ ]
+      } ],
+      "uid" : "7a1bcddc3f018d2a3c9826a8cb79975e"
+    }, {
+      "name" : "test_order_flow",
+      "children" : [ {
+        "name" : "Успешное оформление заказа через верхнюю кнопку",
+        "uid" : "b35ea848be80cc",
+        "parentUid" : "8aa6568377289683daf3eec24f3f6509",
+        "status" : "passed",
+        "time" : {
+          "start" : 1785671091500,
+          "stop" : 1785671098426,
+          "duration" : 6926
+        },
+        "flaky" : false,
+        "parameters" : [ "{'name': 'Иван', 'surname': 'Петров', 'address': 'ул. Ленина, д. 10', 'metro': 'Черкизовская', 'phone': '+79123456789', 'delivery_date': '25.12.2026', 'rental_period': 'сутки', 'color': 'black', 'comment': 'Позвонить за 30 минут'}" ]
+      }, {
+        "name" : "Успешное оформление заказа через верхнюю кнопку",
+        "uid" : "de44f1db2298c76b",
+        "parentUid" : "8aa6568377289683daf3eec24f3f6509",
+        "status" : "passed",
+        "time" : {
+          "start" : 1785671114056,
+          "stop" : 1785671121282,
+          "duration" : 7226
+        },
+        "flaky" : false,
+        "parameters" : [ "{'name': 'Анна', 'surname': 'Иванова', 'address': 'пр. Мира, д. 25', 'metro': 'Сокольники', 'phone': '+79998887766', 'delivery_date': '26.12.2026', 'rental_period': 'двое суток', 'color': 'grey', 'comment': 'Домофон не работает'}" ]
+      }, {
+        "name" : "Успешное оформление заказа через нижнюю кнопку",
+        "uid" : "9f086866686cfa33",
+        "parentUid" : "8aa6568377289683daf3eec24f3f6509",
+        "status" : "passed",
+        "time" : {
+          "start" : 1785671136984,
+          "stop" : 1785671143829,
+          "duration" : 6845
+        },
+        "flaky" : false,
+        "parameters" : [ "{'name': 'Иван', 'surname': 'Петров', 'address': 'ул. Ленина, д. 10', 'metro': 'Черкизовская', 'phone': '+79123456789', 'delivery_date': '25.12.2026', 'rental_period': 'сутки', 'color': 'black', 'comment': 'Позвонить за 30 минут'}" ]
+      }, {
+        "name" : "Успешное оформление заказа через нижнюю кнопку",
+        "uid" : "5427a5e067ec191a",
+        "parentUid" : "8aa6568377289683daf3eec24f3f6509",
+        "status" : "passed",
+        "time" : {
+          "start" : 1785671158968,
+          "stop" : 1785671167930,
+          "duration" : 8962
+        },
+        "flaky" : false,
+        "parameters" : [ "{'name': 'Анна', 'surname': 'Иванова', 'address': 'пр. Мира, д. 25', 'metro': 'Сокольники', 'phone': '+79998887766', 'delivery_date': '26.12.2026', 'rental_period': 'двое суток', 'color': 'grey', 'comment': 'Домофон не работает'}" ]
+      } ],
+      "uid" : "8aa6568377289683daf3eec24f3f6509"
+    } ],
+    "uid" : "bf49149a3821e34f7608bb6885d52868"
+  } ]
+}
