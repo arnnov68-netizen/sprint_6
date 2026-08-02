@@ -1,107 +1,84 @@
+# pages/main_page.py
 import allure
-from pages.base_page import BasePage
-from locators.main_page_locators import MainPageLocators
 from selenium.webdriver.common.by import By
-import time
+from pages.base_page import BasePage
 
 
 class MainPage(BasePage):
-    """Главная страница"""
-
     URL = "https://qa-scooter.praktikum-services.ru/"
 
-    def __init__(self, driver):
-        super().__init__(driver)
-        self.locators = MainPageLocators()
+    # Локаторы
+    ORDER_BUTTON_TOP = (By.XPATH, "//button[contains(@class, 'Button_Button__ra12g') and text()='Заказать']")
+    ORDER_BUTTON_BOTTOM = (By.XPATH, "//button[contains(@class, 'Button_Button__ra12g') and text()='Заказать']")
+    SCOOTER_LOGO = (By.XPATH, "//img[@alt='Scooter']")
+    YANDEX_LOGO = (By.XPATH, "//img[@alt='Yandex']")
+
+    # Локаторы для FAQ - используем стабильные локаторы
+    FAQ_CONTAINER = (By.XPATH, "//div[contains(@class, 'Home_FAQ__3uVm4')]")
 
     @allure.step("Открыть главную страницу")
     def open(self):
         """Открыть главную страницу"""
         self.open_page(self.URL)
-        self.accept_cookies()
-        return self
 
-    @allure.step("Принять куки")
-    def accept_cookies(self):
-        """Принять куки, если они есть"""
-        try:
-            accept_button = self.find_element(self.locators.COOKIE_BUTTON, timeout=3)
-            if accept_button:
-                accept_button.click()
-                time.sleep(0.5)
-        except:
-            pass
-        return self
-
-    @allure.step("Кликнуть на вопрос по тексту: {question_text}")
-    def click_question_by_text(self, question_text):
-        """Кликнуть на вопрос по его тексту (стабильный способ)"""
-        # Используем XPATH с текстом вопроса
-        question_locator = (By.XPATH,
-                            f"//div[contains(@class, 'accordion__button') and contains(text(), '{question_text}')]")
-        self.scroll_to_element(question_locator)
-        self.click_element(question_locator)
-        time.sleep(0.5)
-        return question_locator
-
-    @allure.step("Кликнуть на вопрос по индексу #{index}")
-    def click_question_by_index(self, index):
-        """Кликнуть на вопрос по его позиции (1-based)"""
-        question_locator = (By.XPATH, f"(//div[contains(@class, 'accordion__button')])[{index}]")
-        self.scroll_to_element(question_locator)
-        self.click_element(question_locator)
-        time.sleep(0.5)
-        return question_locator
-
-    @allure.step("Кликнуть на вопрос #{question_index} (устаревший способ)")
-    def click_question(self, question_index):
-        """Кликнуть на вопрос по индексу (для обратной совместимости)"""
-        # Используем стабильный способ - по позиции
-        return self.click_question_by_index(question_index + 1)
-
-    @allure.step("Получить текст ответа по тексту вопроса")
-    def get_answer_by_question_text(self, question_text):
-        """Получить ответ на вопрос по его тексту"""
-        answer_locator = (By.XPATH,
-                          f"//div[contains(@class, 'accordion__button') and contains(text(), '{question_text}')]/following-sibling::div[contains(@class, 'accordion__panel')]")
-        time.sleep(0.5)
-        return self.get_text(answer_locator)
-
-    @allure.step("Получить текст ответа по индексу #{index}")
-    def get_answer_by_index(self, index):
-        """Получить ответ на вопрос по его позиции (1-based)"""
-        answer_locator = (By.XPATH, f"(//div[contains(@class, 'accordion__panel')])[{index}]")
-        time.sleep(0.5)
-        return self.get_text(answer_locator)
-
-    @allure.step("Получить текст ответа на вопрос #{question_index} (устаревший способ)")
-    def get_answer_text(self, question_index):
-        """Получить текст ответа на вопрос по индексу (для обратной совместимости)"""
-        return self.get_answer_by_index(question_index + 1)
-
-    @allure.step("Кликнуть на кнопку заказа вверху страницы")
+    @allure.step("Кликнуть на кнопку заказа (верхняя)")
     def click_order_button_top(self):
-        """Кликнуть на кнопку заказа вверху страницы"""
-        self.click_element(self.locators.ORDER_BUTTON_TOP)
-        time.sleep(0.5)
+        """Кликнуть на верхнюю кнопку заказа"""
+        self.click_element(self.ORDER_BUTTON_TOP)
 
-    @allure.step("Кликнуть на кнопку заказа внизу страницы")
+    @allure.step("Кликнуть на кнопку заказа (нижняя)")
     def click_order_button_bottom(self):
-        """Кликнуть на кнопку заказа внизу страницы"""
-        self.scroll_to_element(self.locators.ORDER_BUTTON_BOTTOM)
-        time.sleep(0.5)
-        self.click_element(self.locators.ORDER_BUTTON_BOTTOM)
-        time.sleep(0.5)
+        """Кликнуть на нижнюю кнопку заказа"""
+        self.click_element(self.ORDER_BUTTON_BOTTOM)
 
     @allure.step("Кликнуть на логотип Самоката")
     def click_scooter_logo(self):
         """Кликнуть на логотип Самоката"""
-        self.click_element(self.locators.SCOOTER_LOGO)
-        time.sleep(1)
+        self.click_element(self.SCOOTER_LOGO)
 
     @allure.step("Кликнуть на логотип Яндекса")
     def click_yandex_logo(self):
         """Кликнуть на логотип Яндекса"""
-        self.click_element(self.locators.YANDEX_LOGO)
-        time.sleep(2)
-        self.switch_to_new_window()
+        self.click_element(self.YANDEX_LOGO)
+
+    @allure.step("Кликнуть на вопрос по индексу")
+    def click_question_by_index(self, index):
+        """Кликнуть на вопрос по его порядковому номеру"""
+        # Используем позицию внутри контейнера
+        locator = (By.XPATH, f"(//div[contains(@class, 'accordion__heading')])[{index}]")
+        self.click_element(locator)
+
+    @allure.step("Получить ответ по индексу")
+    def get_answer_by_index(self, index):
+        """Получить текст ответа по порядковому номеру вопроса"""
+        # Используем позицию внутри контейнера
+        locator = (By.XPATH, f"(//div[contains(@class, 'accordion__panel')])[{index}]")
+        element = self.find_element(locator)
+        return element.text
+
+    @allure.step("Кликнуть на вопрос по тексту")
+    def click_question_by_text(self, question_text):
+        """Кликнуть на вопрос по его тексту"""
+        locator = (By.XPATH, f"//div[contains(@class, 'accordion__heading')]//div[contains(text(), '{question_text}')]")
+        self.click_element(locator)
+
+    @allure.step("Получить ответ по тексту вопроса")
+    def get_answer_by_question_text(self, question_text):
+        """Получить ответ по тексту вопроса"""
+        # Находим родительский элемент вопроса
+        question_locator = (By.XPATH,
+                            f"//div[contains(@class, 'accordion__heading') and contains(., '{question_text}')]")
+        question_element = self.find_element(question_locator)
+
+        # Находим соответствующий ответ (соседний элемент)
+        answer_locator = (By.XPATH,
+                          f"//div[contains(@class, 'accordion__heading') and contains(., '{question_text}')]/following-sibling::div[contains(@class, 'accordion__panel')]")
+        answer_element = self.find_element(answer_locator)
+        return answer_element.text
+
+    @allure.step("Прокрутить к вопросу по индексу")
+    def scroll_to_question(self, index):
+        """Прокрутить к вопросу по индексу"""
+        locator = (By.XPATH, f"(//div[contains(@class, 'accordion__heading')])[{index}]")
+        element = self.find_element(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
