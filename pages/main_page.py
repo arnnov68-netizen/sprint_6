@@ -1,6 +1,8 @@
 # pages/main_page.py
 import allure
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 
 
@@ -13,13 +15,14 @@ class MainPage(BasePage):
     SCOOTER_LOGO = (By.XPATH, "//img[@alt='Scooter']")
     YANDEX_LOGO = (By.XPATH, "//img[@alt='Yandex']")
 
-    # Локаторы для FAQ - используем стабильные локаторы
-    FAQ_CONTAINER = (By.XPATH, "//div[contains(@class, 'Home_FAQ__3uVm4')]")
-
     @allure.step("Открыть главную страницу")
     def open(self):
         """Открыть главную страницу"""
         self.open_page(self.URL)
+        # Дополнительное ожидание загрузки страницы для Firefox
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'Home_Header')]"))
+        )
 
     @allure.step("Кликнуть на кнопку заказа (верхняя)")
     def click_order_button_top(self):
@@ -36,49 +39,63 @@ class MainPage(BasePage):
         """Кликнуть на логотип Самоката"""
         self.click_element(self.SCOOTER_LOGO)
 
-    @allure.step("Кликнуть на логотип Яндекса")
-    def click_yandex_logo(self):
-        """Кликнуть на логотип Яндекса"""
+    @allure.step("Кликнуть на логотип Яндекса и переключиться на новое окно")
+    def click_yandex_logo_and_switch_to_new_window(self):
+        """Кликнуть на логотип Яндекса и переключиться на новое окно"""
+        # Запоминаем текущее окно
+        main_window = self.get_current_window_handle()
+        initial_window_count = self.get_window_handles_count()
+
+        # Кликаем на логотип
         self.click_element(self.YANDEX_LOGO)
+
+        # Для Firefox нужно дополнительное ожидание перед проверкой окон
+        import time
+        time.sleep(1)
+
+        # Ожидаем появления нового окна
+        self.wait_for_new_window(initial_window_count, timeout=15)
+
+        # Получаем новое окно
+        new_window = self.get_new_window_handle(main_window)
+
+        if new_window is None:
+            raise Exception("Новое окно не найдено")
+
+        # Переключаемся на новое окно
+        self.switch_to_window(new_window)
+
+        # Дополнительное ожидание для Firefox
+        time.sleep(1)
+
+        # Ожидаем загрузки Дзена
+        self.wait_for_url_contains("dzen.ru", timeout=20)
 
     @allure.step("Кликнуть на вопрос по индексу")
     def click_question_by_index(self, index):
         """Кликнуть на вопрос по его порядковому номеру"""
-        # Используем позицию внутри контейнера
         locator = (By.XPATH, f"(//div[contains(@class, 'accordion__heading')])[{index}]")
+        # Прокручиваем к вопросу
+        element = self.find_element(locator)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        import time
+        time.sleep(0.5)  # Небольшая задержка для Firefox
         self.click_element(locator)
 
     @allure.step("Получить ответ по индексу")
     def get_answer_by_index(self, index):
         """Получить текст ответа по порядковому номеру вопроса"""
-        # Используем позицию внутри контейнера
         locator = (By.XPATH, f"(//div[contains(@class, 'accordion__panel')])[{index}]")
+        # Ожидаем, что ответ появился
+        WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located(locator)
+        )
         element = self.find_element(locator)
         return element.text
-
-    @allure.step("Кликнуть на вопрос по тексту")
-    def click_question_by_text(self, question_text):
-        """Кликнуть на вопрос по его тексту"""
-        locator = (By.XPATH, f"//div[contains(@class, 'accordion__heading')]//div[contains(text(), '{question_text}')]")
-        self.click_element(locator)
-
-    @allure.step("Получить ответ по тексту вопроса")
-    def get_answer_by_question_text(self, question_text):
-        """Получить ответ по тексту вопроса"""
-        # Находим родительский элемент вопроса
-        question_locator = (By.XPATH,
-                            f"//div[contains(@class, 'accordion__heading') and contains(., '{question_text}')]")
-        question_element = self.find_element(question_locator)
-
-        # Находим соответствующий ответ (соседний элемент)
-        answer_locator = (By.XPATH,
-                          f"//div[contains(@class, 'accordion__heading') and contains(., '{question_text}')]/following-sibling::div[contains(@class, 'accordion__panel')]")
-        answer_element = self.find_element(answer_locator)
-        return answer_element.text
 
     @allure.step("Прокрутить к вопросу по индексу")
     def scroll_to_question(self, index):
         """Прокрутить к вопросу по индексу"""
         locator = (By.XPATH, f"(//div[contains(@class, 'accordion__heading')])[{index}]")
         element = self.find_element(locator)
-        self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
