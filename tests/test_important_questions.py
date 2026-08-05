@@ -1,5 +1,4 @@
 # tests/test_important_questions.py
-# tests/test_important_questions.py
 import allure
 import pytest
 from pages.main_page import MainPage
