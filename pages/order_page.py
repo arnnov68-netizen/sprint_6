@@ -26,23 +26,29 @@ class OrderPage(BasePage):
     # Локатор успешного заказа
     ORDER_SUCCESS = (By.XPATH, "//div[contains(@class, 'Order_ModalHeader') and contains(text(), 'Заказ оформлен')]")
 
-    @allure.step("Заполнить первую форму заказа")
+    @allure.step(
+        "Заполнить первую форму заказа: имя={name}, фамилия={surname}, адрес={address}, метро={metro}, телефон={phone}")
     def fill_first_form(self, name, surname, address, metro, phone):
         """Заполнение первой формы заказа"""
         self.enter_text(self.NAME_INPUT, name)
         self.enter_text(self.SURNAME_INPUT, surname)
         self.enter_text(self.ADDRESS_INPUT, address)
         self.enter_text(self.METRO_INPUT, metro)
+
         # Выбираем станцию из списка
         metro_option = (By.XPATH, f"//div[contains(text(), '{metro}')]")
+        self.wait_for_element_clickable(metro_option)
         self.click_element(metro_option)
+
         self.enter_text(self.PHONE_INPUT, phone)
+        self.wait_for_element_clickable(self.NEXT_BUTTON)
         self.click_element(self.NEXT_BUTTON)
 
-    @allure.step("Заполнить вторую форму заказа")
+    @allure.step(
+        "Заполнить вторую форму заказа: дата={delivery_date}, период={rental_period}, цвет={color}, комментарий={comment}")
     def fill_second_form(self, delivery_date, rental_period, color, comment):
         """Заполнение второй формы заказа"""
-        # Вводим дату и нажимаем Enter, чтобы закрыть календарь
+        # Вводим дату
         date_input = self.find_element(self.DELIVERY_DATE_INPUT)
         date_input.send_keys(delivery_date)
         date_input.send_keys(Keys.ENTER)
@@ -52,6 +58,7 @@ class OrderPage(BasePage):
 
         # Выбираем период аренды
         rental_option = (By.XPATH, f"//div[text()='{rental_period}']")
+        self.wait_for_element_clickable(rental_option)
         self.click_element(rental_option)
 
         # Выбираем цвет
@@ -61,7 +68,11 @@ class OrderPage(BasePage):
             self.click_element(self.COLOR_CHECKBOX_GREY)
 
         self.enter_text(self.COMMENT_INPUT, comment)
+
+        self.wait_for_element_clickable(self.ORDER_BUTTON)
         self.click_element(self.ORDER_BUTTON)
+
+        self.wait_for_element_clickable(self.CONFIRM_BUTTON)
         self.click_element(self.CONFIRM_BUTTON)
 
     @allure.step("Проверить успешность заказа")
