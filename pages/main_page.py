@@ -14,15 +14,14 @@ class MainPage(BasePage):
     ORDER_BUTTON_BOTTOM = (By.XPATH, "//button[contains(@class, 'Button_Button__ra12g') and text()='Заказать']")
     SCOOTER_LOGO = (By.XPATH, "//img[@alt='Scooter']")
     YANDEX_LOGO = (By.XPATH, "//img[@alt='Yandex']")
+    HEADER = (By.XPATH, "//div[contains(@class, 'Home_Header')]")
 
     @allure.step("Открыть главную страницу")
     def open(self):
         """Открыть главную страницу"""
         self.open_page(self.URL)
-        # Дополнительное ожидание загрузки страницы для Firefox
-        WebDriverWait(self.driver, 15).until(
-            EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'Home_Header')]"))
-        )
+        # Ожидаем загрузки страницы
+        self.wait_for_element_visible(self.HEADER, timeout=15)
 
     @allure.step("Кликнуть на кнопку заказа (верхняя)")
     def click_order_button_top(self):
@@ -49,10 +48,6 @@ class MainPage(BasePage):
         # Кликаем на логотип
         self.click_element(self.YANDEX_LOGO)
 
-        # Для Firefox нужно дополнительное ожидание перед проверкой окон
-        import time
-        time.sleep(1)
-
         # Ожидаем появления нового окна
         self.wait_for_new_window(initial_window_count, timeout=15)
 
@@ -65,37 +60,37 @@ class MainPage(BasePage):
         # Переключаемся на новое окно
         self.switch_to_window(new_window)
 
-        # Дополнительное ожидание для Firefox
-        time.sleep(1)
-
         # Ожидаем загрузки Дзена
         self.wait_for_url_contains("dzen.ru", timeout=20)
 
-    @allure.step("Кликнуть на вопрос по индексу")
+    @allure.step("Кликнуть на вопрос по индексу: {index}")
     def click_question_by_index(self, index):
         """Кликнуть на вопрос по его порядковому номеру"""
         locator = (By.XPATH, f"(//div[contains(@class, 'accordion__heading')])[{index}]")
+
         # Прокручиваем к вопросу
-        element = self.find_element(locator)
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-        import time
-        time.sleep(0.5)  # Небольшая задержка для Firefox
+        self.scroll_to_element(locator)
+
+        # Ожидаем, что элемент станет кликабельным
+        self.wait_for_element_clickable(locator)
+
+        # Кликаем на вопрос
         self.click_element(locator)
 
-    @allure.step("Получить ответ по индексу")
+        # Ожидаем появления ответа
+        answer_locator = (By.XPATH, f"(//div[contains(@class, 'accordion__panel')])[{index}]")
+        self.wait_for_element_visible(answer_locator)
+
+    @allure.step("Получить ответ по индексу: {index}")
     def get_answer_by_index(self, index):
         """Получить текст ответа по порядковому номеру вопроса"""
         locator = (By.XPATH, f"(//div[contains(@class, 'accordion__panel')])[{index}]")
-        # Ожидаем, что ответ появился
-        WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located(locator)
-        )
-        element = self.find_element(locator)
-        return element.text
+        # Ожидаем, что ответ видим
+        self.wait_for_element_visible(locator)
+        return self.get_element_text(locator)
 
-    @allure.step("Прокрутить к вопросу по индексу")
+    @allure.step("Прокрутить к вопросу по индексу: {index}")
     def scroll_to_question(self, index):
         """Прокрутить к вопросу по индексу"""
         locator = (By.XPATH, f"(//div[contains(@class, 'accordion__heading')])[{index}]")
-        element = self.find_element(locator)
-        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        self.scroll_to_element(locator)
